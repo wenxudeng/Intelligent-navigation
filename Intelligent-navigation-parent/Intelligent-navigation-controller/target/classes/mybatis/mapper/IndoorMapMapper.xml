@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.hust.top.dao.IndoorMapMapper" >
+  <resultMap id="BaseResultMap" type="edu.hust.top.bean.IndoorMap" >
+    <id column="IndoorMapID" property="indoormapid" jdbcType="INTEGER" />
+    <result column="floor" property="floor" jdbcType="INTEGER" />
+    <result column="svgPath" property="svgpath" jdbcType="VARCHAR" />
+    <result column="buildingID" property="buildingid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    IndoorMapID, floor, svgPath, buildingID
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="edu.hust.top.bean.IndoorMapExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_indoorMap
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_indoorMap
+    where IndoorMapID = #{indoormapid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_indoorMap
+    where IndoorMapID = #{indoormapid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="edu.hust.top.bean.IndoorMapExample" >
+    delete from t_indoorMap
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="edu.hust.top.bean.IndoorMap" >
+    insert into t_indoorMap (IndoorMapID, floor, svgPath, 
+      buildingID)
+    values (#{indoormapid,jdbcType=INTEGER}, #{floor,jdbcType=INTEGER}, #{svgpath,jdbcType=VARCHAR}, 
+      #{buildingid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="edu.hust.top.bean.IndoorMap" >
+    insert into t_indoorMap
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="indoormapid != null" >
+        IndoorMapID,
+      </if>
+      <if test="floor != null" >
+        floor,
+      </if>
+      <if test="svgpath != null" >
+        svgPath,
+      </if>
+      <if test="buildingid != null" >
+        buildingID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="indoormapid != null" >
+        #{indoormapid,jdbcType=INTEGER},
+      </if>
+      <if test="floor != null" >
+        #{floor,jdbcType=INTEGER},
+      </if>
+      <if test="svgpath != null" >
+        #{svgpath,jdbcType=VARCHAR},
+      </if>
+      <if test="buildingid != null" >
+        #{buildingid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="edu.hust.top.bean.IndoorMapExample" resultType="java.lang.Integer" >
+    select count(*) from t_indoorMap
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_indoorMap
+    <set >
+      <if test="record.indoormapid != null" >
+        IndoorMapID = #{record.indoormapid,jdbcType=INTEGER},
+      </if>
+      <if test="record.floor != null" >
+        floor = #{record.floor,jdbcType=INTEGER},
+      </if>
+      <if test="record.svgpath != null" >
+        svgPath = #{record.svgpath,jdbcType=VARCHAR},
+      </if>
+      <if test="record.buildingid != null" >
+        buildingID = #{record.buildingid,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_indoorMap
+    set IndoorMapID = #{record.indoormapid,jdbcType=INTEGER},
+      floor = #{record.floor,jdbcType=INTEGER},
+      svgPath = #{record.svgpath,jdbcType=VARCHAR},
+      buildingID = #{record.buildingid,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="edu.hust.top.bean.IndoorMap" >
+    update t_indoorMap
+    <set >
+      <if test="floor != null" >
+        floor = #{floor,jdbcType=INTEGER},
+      </if>
+      <if test="svgpath != null" >
+        svgPath = #{svgpath,jdbcType=VARCHAR},
+      </if>
+      <if test="buildingid != null" >
+        buildingID = #{buildingid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where IndoorMapID = #{indoormapid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="edu.hust.top.bean.IndoorMap" >
+    update t_indoorMap
+    set floor = #{floor,jdbcType=INTEGER},
+      svgPath = #{svgpath,jdbcType=VARCHAR},
+      buildingID = #{buildingid,jdbcType=INTEGER}
+    where IndoorMapID = #{indoormapid,jdbcType=INTEGER}
+  </update>
+</mapper>

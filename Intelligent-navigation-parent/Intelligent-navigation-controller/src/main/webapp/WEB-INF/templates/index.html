@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>首页</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="" />
+    <meta charset = "utf-8">
+    <base th:href="@{/}">
+    <!--font-awsome-css-->
+    <link rel="shortcut icon" href="images/favicon.ico" />
+    <link rel="bookmark"href="images/favicon.ico" />
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <!--bootstrap-->
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <!--custom css-->
+    <link href="css/style.css" rel="stylesheet" type="text/css"/>
+    <!--component-css-->
+    <script src="js/jquery-2.1.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <!--script-->
+    <script src="js/modernizr.custom.js"></script>
+    <script src="js/bigSlide.js"></script>
+
+    <script src="js/jquery.validate.min.js "></script>
+    <script src="js/messages_zh.min.js "></script>
+    <script src="layer/layer.js "></script>
+    <script src="js/common.js "></script>
+    <script src="js/md5.min.js "></script>
+    <script src="js/wxInfo.js "></script>
+    <script src="js/jquery.nicescroll.js"></script>
+    <script src="js/scripts.js"></script>
+    <script type="application/x-javascript">
+        addEventListener("load", function() {setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); }
+    </script>
+    <!--这里使用插件实现侧边栏收缩-->
+    <script>
+        $(document).ready(function() {
+            $('.menu-link').bigSlide();
+
+        });
+    </script>
+    <!-- pop-up-box -->
+    <script src="js/jquery.magnific-popup.js" type="text/javascript"></script>
+    <script>
+        $(document).ready(function() {
+            $('.popup-top-anim').magnificPopup({
+                type: 'inline',
+                fixedContentPos: false,
+                fixedBgPos: true,
+                overflowY: 'auto',
+                closeBtnInside: true,
+                preloader: false,
+                midClick: true,
+                removalDelay: 300,
+                mainClass: 'my-mfp-zoom-in'
+            });
+        });
+    </script>
+    <!--//pop-up-box -->
+</head>
+<body>
+<div class="body-back">
+    <div class="masthead pdng-stn1">
+        <div id="menu" class="panel" role="navigation">
+            <div class="wrap-content">
+                <div class="profile-menu text-center">
+                    <img class="border-effect" src="images/logo.jpg" alt=" ">
+                    <h3>菜单</h3>
+                    <div class="pro-menu">
+                        <div class="logo">
+                            <li><a class=" link link--yaku active" href="#small-dialog">管理员登录</a></li>
+                            <li><a class=" link link--yaku active" href="#">注册</a></li>
+                            <li><a class=" link link--yaku active" href="#">关于我们</a></li>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="phone-box wrap push" id="home">
+            <div class="menu-notify">
+                <div class="profile-left">
+                    <a href="#menu" class="menu-link"><i class="fa fa-list-ul"></i></a>
+                </div>
+                <div class="Profile-mid">
+                    <h5 class="pro-link"><a href="#">枫丹白露欢迎您</a></h5>
+                </div>
+                <div class="Profile-right">
+                    <a href="#small-dialog" class="popup-top-anim"> <i class="fa fa-user"></i></a>
+                    <!-- modal -->
+                    <div id="small-dialog" class="mfp-hide">
+                        <div class="login-modal">
+                            <div class="booking-info">
+                                <h3>管理员登录</h3>
+                            </div>
+                            <div class="login-form">
+                                <p style="color: red" th:text="${session.message}"></p>
+                                <form  id="loginForm" action="manager/do/login.html" method="post">
+                                    <p>管理员姓名 </p>
+                                    <input id = "managerName" type="text" name="managername" required="true"/>
+                                    <p>登录密码</p>
+                                    <input id = "managerPwd" type="password" name="managerpwd" required="true"/>
+                                    <div class="wthree-text">
+                                        <div class="clear"> </div>
+                                    </div>
+                                    <button class="btn btn-success" type="submit">登录</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- //modal -->
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <!-- banner -->
+            <div class="details-grid">
+                <!-- <div class="details-shade"> -->
+                <img src="images/logo.jpg" class="img-responsive center-block" style="width: 700px; height: 400px">
+
+
+                <!-- </div> -->
+            </div>
+            <div class="w3agile banner-bottom">
+                <ul>
+                    <!-- <li><a href="#" class="hvr-radial-out"><i class="fa fa-map" aria-hidden="true"></i></a><h6>室外导航</h6></li> -->
+                    <li><a href="regionList.html" class="hvr-radial-out"><i class="fa fa-location-arrow" aria-hidden="true"></i></a><h6>导航</h6></li>
+                    <li><a href="worker/to/checkin/page.html" class="hvr-radial-out"><i class="fa fa-calendar-check-o" aria-hidden="true"></i></a><h6>员工签到</h6></li>
+                    <li><a href="worker/to/regist/page.html" class="hvr-radial-out"><i class="fa fa-registered" aria-hidden="true"></i></a><h6>员工注册</h6></li>
+
+                </ul>
+                <ul>
+                    <li><a href="#" class="hvr-radial-out"><i class="fa fa-users" aria-hidden="true"></i></a><h6>合作单位</h6></li>
+                    <li><a href="#" class="hvr-radial-out"><i class="fa fa-comments-o" aria-hidden="true"></i></a><h6>反馈</h6></li>
+                    <li><a href="#" class="hvr-radial-out"><i class="fa fa-bus" aria-hidden="true"></i></a><h6>周边交通</h6></li>
+                    <!-- <li><a href="#" class="hvr-radial-out"><i class="fa fa-share" aria-hidden="true"></i></a><h6>分享网站</h6></li> -->
+                </ul>
+            </div>
+
+            <!--/footer-->
+            <div class="w3agile footer">
+                <div class="col-md-3 w3agile_footer_grid">
+                    <h3>关于我们</h3>
+                </div>
+                <div class="clearfix"> </div>
+            </div>
+            <div class="w3agile agileinfo_copy_right">
+                <div class="agileinfo_copy_right_left">
+                    <p>© 2018 枫丹白露. All rights reserved | Powered by <a href="#">枫丹白露</a></p>
+                </div>
+                <div class="clearfix"> </div>
+            </div>
+            <!--/footer-->
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

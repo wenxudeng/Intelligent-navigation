@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+    <!-- 加载外部的属性文件 -->
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+
+    <!-- 配置数据源 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="username" value="${jdbc.user}"></property>
+        <property name="password" value="${jdbc.password}"></property>
+        <property name="url" value="${jdbc.url}"></property>
+        <property name="driverClassName" value="${jdbc.driver}"></property>
+    </bean>
+
+    <!-- 配置sqlSessionFactoryBean整合MyBatis -->
+    <bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- 指定MyBatis全局配置文件位置 -->
+        <property name="configLocation" value="classpath:mybatis-config.xml"></property>
+
+        <!-- 指定mapper.xml配置文件的位置 -->
+        <property name="mapperLocations" value="classpath:mybatis/mapper/*.xml"></property>
+
+        <!-- 装配数据源 -->
+        <property name="dataSource" ref="dataSource"></property>
+
+        <!-- 配置插件 -->
+        <property name="plugins">
+            <array>
+                <!-- 配置PageHelper插件 -->
+                <bean class="com.github.pagehelper.PageHelper">
+                    <property name="properties">
+                        <props>
+                            <!-- 配置数据库方言，告诉PageHelper当前使用的数据库 -->
+                            <prop key="dialect">mysql</prop>
+
+                            <!-- 配置页码的合理化修正 -->
+                            <prop key="reasonable">true</prop>
+                        </props>
+                    </property>
+                </bean>
+            </array>
+        </property>
+    </bean>
+
+    <!-- 配置MapperScannerConfigurer来扫描映射文件接口所在的包 -->
+    <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="edu.hust.top.dao"></property>
+    </bean>
+
+</beans>

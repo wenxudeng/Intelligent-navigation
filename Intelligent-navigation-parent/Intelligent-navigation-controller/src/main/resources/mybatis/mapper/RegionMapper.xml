@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.hust.top.dao.RegionMapper" >
+  <resultMap id="BaseResultMap" type="edu.hust.top.bean.Region" >
+    <id column="regionID" property="regionid" jdbcType="INTEGER" />
+    <result column="regionName" property="regionname" jdbcType="VARCHAR" />
+    <result column="regionLocation" property="regionlocation" jdbcType="VARCHAR" />
+    <result column="regionMap" property="regionmap" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    regionID, regionName, regionLocation, regionMap
+  </sql>
+  <select id="selectRegionListByKeyword" resultMap="BaseResultMap">
+    select regionID, regionName, regionLocation, regionMap
+    from t_region
+    where regionName like concat("%", #{keyword}, "%")
+    or regionLocation like concat("%", #{keyword}, "%")
+    or regionMap like concat("%", #{keyword}, "%")
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="edu.hust.top.bean.RegionExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_region
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_region
+    where regionID = #{regionid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_region
+    where regionID = #{regionid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="edu.hust.top.bean.RegionExample" >
+    delete from t_region
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="edu.hust.top.bean.Region" >
+    insert into t_region (regionID, regionName, regionLocation, 
+      regionMap)
+    values (#{regionid,jdbcType=INTEGER}, #{regionname,jdbcType=VARCHAR}, #{regionlocation,jdbcType=VARCHAR}, 
+      #{regionmap,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="edu.hust.top.bean.Region" >
+    insert into t_region
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="regionid != null" >
+        regionID,
+      </if>
+      <if test="regionname != null" >
+        regionName,
+      </if>
+      <if test="regionlocation != null" >
+        regionLocation,
+      </if>
+      <if test="regionmap != null" >
+        regionMap,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="regionid != null" >
+        #{regionid,jdbcType=INTEGER},
+      </if>
+      <if test="regionname != null" >
+        #{regionname,jdbcType=VARCHAR},
+      </if>
+      <if test="regionlocation != null" >
+        #{regionlocation,jdbcType=VARCHAR},
+      </if>
+      <if test="regionmap != null" >
+        #{regionmap,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="edu.hust.top.bean.RegionExample" resultType="java.lang.Integer" >
+    select count(*) from t_region
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_region
+    <set >
+      <if test="record.regionid != null" >
+        regionID = #{record.regionid,jdbcType=INTEGER},
+      </if>
+      <if test="record.regionname != null" >
+        regionName = #{record.regionname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.regionlocation != null" >
+        regionLocation = #{record.regionlocation,jdbcType=VARCHAR},
+      </if>
+      <if test="record.regionmap != null" >
+        regionMap = #{record.regionmap,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_region
+    set regionID = #{record.regionid,jdbcType=INTEGER},
+      regionName = #{record.regionname,jdbcType=VARCHAR},
+      regionLocation = #{record.regionlocation,jdbcType=VARCHAR},
+      regionMap = #{record.regionmap,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="edu.hust.top.bean.Region" >
+    update t_region
+    <set >
+      <if test="regionname != null" >
+        regionName = #{regionname,jdbcType=VARCHAR},
+      </if>
+      <if test="regionlocation != null" >
+        regionLocation = #{regionlocation,jdbcType=VARCHAR},
+      </if>
+      <if test="regionmap != null" >
+        regionMap = #{regionmap,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where regionID = #{regionid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="edu.hust.top.bean.Region" >
+    update t_region
+    set regionName = #{regionname,jdbcType=VARCHAR},
+      regionLocation = #{regionlocation,jdbcType=VARCHAR},
+      regionMap = #{regionmap,jdbcType=VARCHAR}
+    where regionID = #{regionid,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.hust.top.dao.DestinationMapper" >
+  <resultMap id="BaseResultMap" type="edu.hust.top.bean.Destination" >
+    <id column="destinationID" property="destinationid" jdbcType="INTEGER" />
+    <result column="destinationName" property="destinationname" jdbcType="VARCHAR" />
+    <result column="floor" property="floor" jdbcType="INTEGER" />
+    <result column="x" property="x" jdbcType="DOUBLE" />
+    <result column="y" property="y" jdbcType="DOUBLE" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="buildingID" property="buildingid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    destinationID, destinationName, floor, x, y, type, buildingID
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="edu.hust.top.bean.DestinationExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_destination
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_destination
+    where destinationID = #{destinationid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_destination
+    where destinationID = #{destinationid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="edu.hust.top.bean.DestinationExample" >
+    delete from t_destination
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="edu.hust.top.bean.Destination" >
+    insert into t_destination (destinationID, destinationName, floor, 
+      x, y, type, buildingID
+      )
+    values (#{destinationid,jdbcType=INTEGER}, #{destinationname,jdbcType=VARCHAR}, #{floor,jdbcType=INTEGER}, 
+      #{x,jdbcType=DOUBLE}, #{y,jdbcType=DOUBLE}, #{type,jdbcType=INTEGER}, #{buildingid,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="edu.hust.top.bean.Destination" >
+    insert into t_destination
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="destinationid != null" >
+        destinationID,
+      </if>
+      <if test="destinationname != null" >
+        destinationName,
+      </if>
+      <if test="floor != null" >
+        floor,
+      </if>
+      <if test="x != null" >
+        x,
+      </if>
+      <if test="y != null" >
+        y,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="buildingid != null" >
+        buildingID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="destinationid != null" >
+        #{destinationid,jdbcType=INTEGER},
+      </if>
+      <if test="destinationname != null" >
+        #{destinationname,jdbcType=VARCHAR},
+      </if>
+      <if test="floor != null" >
+        #{floor,jdbcType=INTEGER},
+      </if>
+      <if test="x != null" >
+        #{x,jdbcType=DOUBLE},
+      </if>
+      <if test="y != null" >
+        #{y,jdbcType=DOUBLE},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="buildingid != null" >
+        #{buildingid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="edu.hust.top.bean.DestinationExample" resultType="java.lang.Integer" >
+    select count(*) from t_destination
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_destination
+    <set >
+      <if test="record.destinationid != null" >
+        destinationID = #{record.destinationid,jdbcType=INTEGER},
+      </if>
+      <if test="record.destinationname != null" >
+        destinationName = #{record.destinationname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.floor != null" >
+        floor = #{record.floor,jdbcType=INTEGER},
+      </if>
+      <if test="record.x != null" >
+        x = #{record.x,jdbcType=DOUBLE},
+      </if>
+      <if test="record.y != null" >
+        y = #{record.y,jdbcType=DOUBLE},
+      </if>
+      <if test="record.type != null" >
+        type = #{record.type,jdbcType=INTEGER},
+      </if>
+      <if test="record.buildingid != null" >
+        buildingID = #{record.buildingid,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_destination
+    set destinationID = #{record.destinationid,jdbcType=INTEGER},
+      destinationName = #{record.destinationname,jdbcType=VARCHAR},
+      floor = #{record.floor,jdbcType=INTEGER},
+      x = #{record.x,jdbcType=DOUBLE},
+      y = #{record.y,jdbcType=DOUBLE},
+      type = #{record.type,jdbcType=INTEGER},
+      buildingID = #{record.buildingid,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="edu.hust.top.bean.Destination" >
+    update t_destination
+    <set >
+      <if test="destinationname != null" >
+        destinationName = #{destinationname,jdbcType=VARCHAR},
+      </if>
+      <if test="floor != null" >
+        floor = #{floor,jdbcType=INTEGER},
+      </if>
+      <if test="x != null" >
+        x = #{x,jdbcType=DOUBLE},
+      </if>
+      <if test="y != null" >
+        y = #{y,jdbcType=DOUBLE},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="buildingid != null" >
+        buildingID = #{buildingid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where destinationID = #{destinationid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="edu.hust.top.bean.Destination" >
+    update t_destination
+    set destinationName = #{destinationname,jdbcType=VARCHAR},
+      floor = #{floor,jdbcType=INTEGER},
+      x = #{x,jdbcType=DOUBLE},
+      y = #{y,jdbcType=DOUBLE},
+      type = #{type,jdbcType=INTEGER},
+      buildingID = #{buildingid,jdbcType=INTEGER}
+    where destinationID = #{destinationid,jdbcType=INTEGER}
+  </update>
+</mapper>

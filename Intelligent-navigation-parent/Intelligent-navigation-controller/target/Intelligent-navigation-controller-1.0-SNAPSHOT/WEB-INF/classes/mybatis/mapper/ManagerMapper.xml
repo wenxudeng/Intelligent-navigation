@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.hust.top.dao.ManagerMapper" >
+  <resultMap id="BaseResultMap" type="edu.hust.top.bean.Manager" >
+    <id column="namagerID" property="namagerid" jdbcType="INTEGER" />
+    <result column="managerName" property="managername" jdbcType="VARCHAR" />
+    <result column="managerPwd" property="managerpwd" jdbcType="VARCHAR" />
+    <result column="manegerPhone" property="manegerphone" jdbcType="VARCHAR" />
+    <result column="managerEmail" property="manageremail" jdbcType="VARCHAR" />
+    <result column="salt" property="salt" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    namagerID, managerName, managerPwd, manegerPhone, managerEmail, salt
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="edu.hust.top.bean.ManagerExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_manager
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_manager
+    where namagerID = #{namagerid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_manager
+    where namagerID = #{namagerid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="edu.hust.top.bean.ManagerExample" >
+    delete from t_manager
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="edu.hust.top.bean.Manager" >
+    insert into t_manager (namagerID, managerName, managerPwd, 
+      manegerPhone, managerEmail, salt
+      )
+    values (#{namagerid,jdbcType=INTEGER}, #{managername,jdbcType=VARCHAR}, #{managerpwd,jdbcType=VARCHAR}, 
+      #{manegerphone,jdbcType=VARCHAR}, #{manageremail,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="edu.hust.top.bean.Manager" >
+    insert into t_manager
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="namagerid != null" >
+        namagerID,
+      </if>
+      <if test="managername != null" >
+        managerName,
+      </if>
+      <if test="managerpwd != null" >
+        managerPwd,
+      </if>
+      <if test="manegerphone != null" >
+        manegerPhone,
+      </if>
+      <if test="manageremail != null" >
+        managerEmail,
+      </if>
+      <if test="salt != null" >
+        salt,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="namagerid != null" >
+        #{namagerid,jdbcType=INTEGER},
+      </if>
+      <if test="managername != null" >
+        #{managername,jdbcType=VARCHAR},
+      </if>
+      <if test="managerpwd != null" >
+        #{managerpwd,jdbcType=VARCHAR},
+      </if>
+      <if test="manegerphone != null" >
+        #{manegerphone,jdbcType=VARCHAR},
+      </if>
+      <if test="manageremail != null" >
+        #{manageremail,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null" >
+        #{salt,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="edu.hust.top.bean.ManagerExample" resultType="java.lang.Integer" >
+    select count(*) from t_manager
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_manager
+    <set >
+      <if test="record.namagerid != null" >
+        namagerID = #{record.namagerid,jdbcType=INTEGER},
+      </if>
+      <if test="record.managername != null" >
+        managerName = #{record.managername,jdbcType=VARCHAR},
+      </if>
+      <if test="record.managerpwd != null" >
+        managerPwd = #{record.managerpwd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.manegerphone != null" >
+        manegerPhone = #{record.manegerphone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.manageremail != null" >
+        managerEmail = #{record.manageremail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.salt != null" >
+        salt = #{record.salt,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_manager
+    set namagerID = #{record.namagerid,jdbcType=INTEGER},
+      managerName = #{record.managername,jdbcType=VARCHAR},
+      managerPwd = #{record.managerpwd,jdbcType=VARCHAR},
+      manegerPhone = #{record.manegerphone,jdbcType=VARCHAR},
+      managerEmail = #{record.manageremail,jdbcType=VARCHAR},
+      salt = #{record.salt,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="edu.hust.top.bean.Manager" >
+    update t_manager
+    <set >
+      <if test="managername != null" >
+        managerName = #{managername,jdbcType=VARCHAR},
+      </if>
+      <if test="managerpwd != null" >
+        managerPwd = #{managerpwd,jdbcType=VARCHAR},
+      </if>
+      <if test="manegerphone != null" >
+        manegerPhone = #{manegerphone,jdbcType=VARCHAR},
+      </if>
+      <if test="manageremail != null" >
+        managerEmail = #{manageremail,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null" >
+        salt = #{salt,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where namagerID = #{namagerid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="edu.hust.top.bean.Manager" >
+    update t_manager
+    set managerName = #{managername,jdbcType=VARCHAR},
+      managerPwd = #{managerpwd,jdbcType=VARCHAR},
+      manegerPhone = #{manegerphone,jdbcType=VARCHAR},
+      managerEmail = #{manageremail,jdbcType=VARCHAR},
+      salt = #{salt,jdbcType=VARCHAR}
+    where namagerID = #{namagerid,jdbcType=INTEGER}
+  </update>
+</mapper>

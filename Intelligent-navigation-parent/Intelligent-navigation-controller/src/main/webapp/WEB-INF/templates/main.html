@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <base th:href="@{/}">
+    <title>主页</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/menu.css" rel="stylesheet">
+    <script src="js/jquery-2.1.1.min.js "></script>
+    <script src="js/bootstrap.min.js "></script>
+    <script>
+        $(function(){
+            $(".panel-heading").click(function(e){
+                /*切换折叠指示图标*/
+                $(this).find("span").toggleClass("glyphicon-chevron-down");
+                $(this).find("span").toggleClass("glyphicon-chevron-up");
+            });
+        });
+    </script>
+    <style>
+        body {
+            padding-top: 60px;
+            padding-left: 0;
+            background-color: #eee;
+        }
+
+    </style>
+
+</head>
+
+<body>
+<div class="container-fluid ">
+    <div class="container-fluid">
+
+        <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#" >枫丹白露导航管理系统</a>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="index.html"><span class="glyphicon glyphicon-home" ></span>首页</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#"><div id ="showtime"></div></a></li>
+                        <li><a href="#">
+                            <span class="glyphicon glyphicon-user" ></span> 欢迎!<strong>[[${session.manager.managername}]]</strong></a>
+                        </li>
+                        <li><a href="manager/do/logout.html">
+                            <span class="glyphicon glyphicon-log-out"></span> [退出]</a>
+                        </li>
+                        <li><a href="manager/to/change/password/page.html">
+                            <span class="glyphicon glyphicon-edit"></span> 修改密码</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            window.onload = function() {
+                var show = document.getElementById("showtime");
+                setInterval(function() {
+                    var time = new Date();
+                    var m = time.getMonth() + 1;
+                    var t = time.getFullYear() + "-" + m + "-"
+                        + time.getDate() + " " + time.getHours() + ":"
+                        + time.getMinutes()+ ":"
+                        + time.getSeconds();
+                    show.innerHTML = t;
+                }, 1000);
+            };
+        </script>
+
+    </div>
+
+    <div class = container-fluid>
+        <div class="row">
+
+            <div class="col-md-2">
+                <div class="panel-group table-responsive" role="tablist">
+                    <!-- ############################################第1组################################################# -->
+                    <div class="panel panel-primary leftMenu">
+                        <!-- 利用data-target指定要折叠的分组列表 -->
+                        <div class="panel-heading" id="collapseListGroupHeading1" data-toggle="collapse" data-target="#collapseListGroup1" role="tab" >
+                            <h4 class="panel-title">园区管理<span class="glyphicon glyphicon-chevron-down right"></span>
+                            </h4>
+                        </div>
+                        <!-- .panel-collapse和.collapse标明折叠元素 .in表示要显示出来 -->
+                        <div id="collapseListGroup1" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading1">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <a href ="region/to/add/page.html" >
+                                        <button class="btn btn-block menu-item-left ">
+                                            <span class="glyphicon glyphicon-triangle-right"></span>添加园区
+                                        </button>
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href ="region/list/page.html" >
+                                        <button class="btn btn-block menu-item-left ">
+                                            <span class="glyphicon glyphicon-triangle-right"></span>查看园区
+                                        </button>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div><!--panel end-->
+                    <!-- ############################################第2组################################################# -->
+                    <div class="panel panel-primary leftMenu">
+                        <div class="panel-heading" id="collapseListGroupHeading2" data-toggle="collapse" data-target="#collapseListGroup2" role="tab" >
+                            <h4 class="panel-title"> 建筑物管理<span class="glyphicon glyphicon-chevron-down right"></span>
+                            </h4>
+                        </div>
+                        <div id="collapseListGroup2" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading2">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <a href ="building/to/add/page.html" >
+                                        <button class="btn btn-block menu-item-left ">
+                                            <span class="glyphicon glyphicon-triangle-right"></span>添加建筑物
+                                        </button>
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="building/list/page.html">
+                                        <button class="btn btn-block menu-item-left ">
+                                            <span class="glyphicon glyphicon-triangle-right"></span>查看建筑物
+                                        </button>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- ############################################第3组################################################# -->
+                    <div class="panel panel-primary leftMenu">
+                        <div class="panel-heading" id="collapseListGroupHeading3" data-toggle="collapse" data-target="#collapseListGroup3" role="tab" >
+                            <h4 class="panel-title"> 蓝牙信标管理<span class="glyphicon glyphicon-chevron-down right"></span>
+                            </h4>
+                        </div>
+                        <div id="collapseListGroup3" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading3">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <a href ="beacon/to/add/page.html" >
+                                        <button class="btn btn-block menu-item-left ">
+                                            <span class="glyphicon glyphicon-triangle-right"></span>添加信标
+                                        </button>
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href ="beacon/list/page.html" >
+                                        <button class="btn btn-block menu-item-left ">
+                                            <span class="glyphicon glyphicon-triangle-right"></span>查看信标
+                                        </button>
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href ="beacon/to/batch/add/page.html" >
+                                        <button class="btn btn-block menu-item-left ">
+                                            <span class="glyphicon glyphicon-triangle-right"></span>批量导入信标
+                                        </button>
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href ="beacon/group/list/page.html" >
+                                        <button class="btn btn-block menu-item-left ">
+                                            <span class="glyphicon glyphicon-triangle-right"></span>查看分组
+                                        </button>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- ############################################第4组################################################# -->
+                    <div class="panel panel-primary leftMenu">
+                        <div class="panel-heading" id="collapseListGroupHeading4" data-toggle="collapse" data-target="#collapseListGroup4" role="tab" >
+                            <h4 class="panel-title"> 目的地管理<span class="glyphicon glyphicon-chevron-down right"></span>
+                            </h4>
+                        </div>
+                        <div id="collapseListGroup4" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading4">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <a href ="destination/list/page.html" >
+                                        <button class="btn btn-block menu-item-left ">
+                                            <span class="glyphicon glyphicon-triangle-right"></span>查看目的地
+                                        </button>
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href ="destination/to/add/page.html" >
+                                        <button class="btn btn-block menu-item-left ">
+                                            <span class="glyphicon glyphicon-triangle-right"></span>添加目的地
+                                        </button>
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href ="destination/to/batch/add/page.html" >
+                                        <button class="btn btn-block menu-item-left ">
+                                            <span class="glyphicon glyphicon-triangle-right"></span>批量添加目的地
+                                        </button>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- ############################################第5组################################################# -->
+                    <div class="panel panel-primary leftMenu">
+                        <div class="panel-heading" id="collapseListGroupHeading5" data-toggle="collapse" data-target="#collapseListGroup5" role="tab" >
+                            <h4 class="panel-title"> 工作人员管理<span class="glyphicon glyphicon-chevron-down right"></span>
+                            </h4>
+                        </div>
+                        <div id="collapseListGroup5" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading5">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <a href ="worker/checkin/list/page.html" >
+                                        <button class="btn btn-block menu-item-left ">
+                                            <span class="glyphicon glyphicon-triangle-right"></span>查看签到记录
+                                        </button>
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href ="worker/list/page.html" >
+                                        <button class="btn btn-block menu-item-left ">
+                                            <span class="glyphicon glyphicon-triangle-right"></span>查看员工信息
+                                        </button>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- ############################################第6组################################################# -->
+                    <div class="panel panel-primary leftMenu">
+                        <div class="panel-heading" id="collapseListGroupHeading6" data-toggle="collapse" data-target="#collapseListGroup6" role="tab" >
+                            <h4 class="panel-title"> 用户分析管理<span class="glyphicon glyphicon-chevron-down right"></span>
+                            </h4>
+                        </div>
+                        <div id="collapseListGroup6" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading6">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <a href ="trace/list/page.html" >
+                                        <button class="btn btn-block menu-item-left ">
+                                            <span class="glyphicon glyphicon-triangle-right"></span>查看用户记录
+                                        </button>
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href ="trace/distribution/list/page.html" >
+                                        <button class="btn btn-block menu-item-left ">
+                                            <span class="glyphicon glyphicon-triangle-right"></span>查看用户分布
+                                        </button>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- ############################################第7组################################################# -->
+                    <div class="panel panel-primary leftMenu">
+                        <div class="panel-heading" id="collapseListGroupHeading7" data-toggle="collapse" data-target="#collapseListGroup7" role="tab" >
+                            <h4 class="panel-title"> 室内地图管理<span class="glyphicon glyphicon-chevron-down right"></span>
+                            </h4>
+                        </div>
+                        <div id="collapseListGroup7" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading7">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <a href ="indoorMap/list/page.html" >
+                                        <button class="btn btn-block menu-item-left ">
+                                            <span class="glyphicon glyphicon-triangle-right"></span>查看室内地图
+                                        </button>
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href ="indoorMap/to/add/page.html" >
+                                        <button class="btn btn-block menu-item-left ">
+                                            <span class="glyphicon glyphicon-triangle-right"></span>录入室内地图
+                                        </button>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- ############################################第8组################################################# -->
+
+                    <!-- ############################################第9组################################################# -->
+
+                    <!-- ############################################第10组################################################# -->
+                </div>
+            </div>
+
+
+            <div class="col-md-10">
+                <div class="container-fluid">
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <h1><p class="text-center">欢迎使用枫丹白露导航管理系统</p></h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
