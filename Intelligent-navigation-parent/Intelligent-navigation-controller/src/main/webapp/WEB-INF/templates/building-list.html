@@ -5,71 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <base th:href="@{/}">
-    <title>修改园区</title>
+    <title>查看建筑物</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/fileinput.min.css" rel="stylesheet">
+    <link href="css/bootstrap-select.min.css" rel="stylesheet">
     <link href="css/menu.css" rel="stylesheet">
-    <script src="js/jquery-2.1.1.min.js "></script>
-    <script src="js/bootstrap.min.js "></script>
-    <script src="js/fileinput.min.js "></script>
-    <script src="js/zh.js "></script>
-    <script>
-        $(function(){
-            $(".panel-heading").click(function(e){
-                /*切换折叠指示图标*/
-                $(this).find("span").toggleClass("glyphicon-chevron-down");
-                $(this).find("span").toggleClass("glyphicon-chevron-up");
-            });
-
-            $("[name=regionMap]").fileinput({
-                showUpload: false,
-                dropZoneEnabled: false,
-                maxFileCount: 1,
-                mainClass: "input-group-sm",
-                language: 'zh', //设置语言
-                uploadUrl: "", //上传的地址
-                allowedFileExtensions: ['svg','js'],//接收的文件后缀
-            });
-
-            // 在文件上传框的值改变事件响应函数中上传图片
-            $("[name=regionMap]").change(function(event){
-                var file = event.target.files[0];
-                var url = window.url || window.webkitURL;
-                var path = url.createObjectURL(file);// blob:http://localhost:8080/09571393-dcd8-4863-a0be-4660e2ac21e1
-                // 将上传的文件封装到FormData对象中
-                var formData = new FormData();
-                formData.append("regionMap", file);
-                // 发送Ajax请求上传文件
-                $.ajax({
-                    "url":"[[@{/region/file/upload.json}]]",
-                    "type":"post",
-                    "data":formData,
-                    "contentType":false,
-                    "processData":false,
-                    "dataType":"json",
-                    "success":function(response){
-                        var result = response.result;
-                        if(result == "SUCCESS") {
-
-                            var regionmap = response.data;
-
-                            $("<input type='hidden' name='regionmap' value="+regionmap+">").insertBefore($("#confirmBtn"));
-
-                            alert("上传成功！");
-                        }
-                        if(result == "FAILED") {
-                            alert(response.message);
-                        }
-                    },
-                    "error":function(response){
-                        alert(response.status + " " + response.statusText);
-                    }
-                });
-
-            });
-        });
-
-    </script>
+    <link href="css/pagination.css" rel="stylesheet">
     <style>
         body {
             padding-top: 60px;
@@ -78,7 +18,91 @@
         }
 
     </style>
+    <script src="js/jquery-2.1.1.min.js "></script>
+    <script src="js/bootstrap.min.js "></script>
+    <script src="js/bootstrap-select.min.js "></script>
+    <script src="js/jquery.pagination.js"></script>
+    <script>
+        $(function(){
+            $(".panel-heading").click(function(e){
+                /*切换折叠指示图标*/
+                $(this).find("span").toggleClass("glyphicon-chevron-down");
+                $(this).find("span").toggleClass("glyphicon-chevron-up");
+            });
 
+            //调用后面声明的函数对页码导航条进行初始化操作
+            initPagination();
+
+            // 调用下拉框选中函数
+            optionSelected();
+        });
+
+        //生成页码导航条的函数
+        function initPagination(){
+            //获取总记录数
+            var totalRecord = [[${pageInfo.total}]];
+
+            //生成一个json对象存储Pagination要设置的值
+            var properties = {
+                num_edge_entries: 3, //边缘页数
+                num_display_entries: 5, //主体页数
+                callback: pageselectCallback,
+                items_per_page: [[${pageInfo.pageSize}]], //每页显示1项
+                //pagination内部使用pageIndex来管理页码，pageIndex从0开始
+                current_page: [[${pageInfo.pageNum - 1}]],
+                prev_text: "上一页",
+                next_text: "下一页"
+            };
+
+            //生成页码到导航条
+            $("#Pagination").pagination(totalRecord, properties);
+        }
+
+        //用户点击上一页、下一页、1、2、3...这样的页码时实现跳转
+        function pageselectCallback(pageIndex, jQuery){
+            //根据pageIndex计算pageNum
+            var pageNum = pageIndex + 1;
+
+            // 每次跳转都需要将关键字带上
+            var keyword = "[[${keyword}]]";
+
+            var regionId = "[[${regionId}]]";
+
+            // 请求地址
+            window.location.href = "building/list/page.html?regionId="+regionId+"&pageNum="+pageNum+"&keyword="+keyword;
+
+            // 由于每一个按钮都是超链接，所以在函数最后取消超连接
+            return false;
+        }
+
+        // 设置下拉框选中某一个选项
+        function optionSelected() {
+            // regionId
+            var regionId = "[[${regionId}]]";
+
+            if(regionId != null){
+                // 获取标签为option的对象列表
+                var optList = $("option");
+                // 遍历当前列表
+                for(var i = 0; i < optList.length; i++){
+                    // regionId
+                    if(optList[i].value == regionId){
+                        // 将该项选择
+                        optList[i].setAttribute("selected","selected");
+                    }
+                }
+            }
+        }
+        //是否确认删除的提示框
+        function confirmDelete() {
+            // 显示是否删除小窗口
+            if (!confirm("确认要删除本条记录？")) {
+                // 如果取消删除,取消超链接的默认行为
+                return window.event.returnValue=false;
+            }
+
+        }
+    </script>
 </head>
 
 <body>
@@ -346,37 +370,89 @@
 
 
             <div class="col-md-10">
-                <div class="container">
+                <div class="container-fluid"><!-- 上方条件选择栏 -->
+                    <form class="form form-inline" role="form" action="building/list/page.html" method ="post">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">选择所属园区</span>
+                                <select name ="regionId" class="selectpicker" show-menu-arrow data-live-search="true">
+                                    <option value="0" >--请选择--</option>
 
-                    <div class="container">
-                        <form class="form" action = "region/update.html" th:action="@{region/update.html(pageNum=${pageNum},keyword=${keyword})}" method ="post">
-                            <h3>修改园区</h3>
-                            <p style="color: red" th:text="${message}"></p>
-                            <input type="hidden" name="regionid" th:value="${region.regionid}">
-                            <div class="input-group">
-                                <span class="input-group-addon">园区名</span>
-                                <input type="text" class="form-control" name="regionname" th:value="${region.regionname}">
-                            </div>
-                            <br>
-                            <div class="input-group">
-                                <span class="input-group-addon">园区地址</span>
-                                <input type="text" class="form-control" name="regionlocation" th:value="${region.regionlocation}">
-                            </div>
-                            <br>
-                            <div class="input-group">
-                                <span class="input-group-addon">上传地图文件</span>
-                                <input name="regionMap" type="file">
-                            </div>
-                            <br>
+                                    <option  value="1" th:each="region : ${session.regionList}" th:value="${region.regionid}">[[${region.regionname}]]</option>
 
-                            <button id="confirmBtn" class="btn btn-sm btn-primary" type="submit">确认修改</button><strong></strong>
-                        </form>
-                    </div>
-                </div>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">输入建筑物名称信息</span>
+                                <input type="text" class="input-sm"  name="keyword" value = "" th:value="${param.keyword}">
+                            </div>
+                            <div class="input-group">
+                                <button class="btn btn-sm btn-primary" type="submit">查询 <span class="glyphicon glyphicon-search"></span></button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div><!-- 上方条件选择栏结束 -->
+                <div class="table-responsive container-fluid"><!-- container -->
+
+                    <table class="table table-striped table-bordered table-hover table-condensed">
+                        <thead>
+                        <tr>
+                            <th>建筑物ID</th>
+                            <th>建筑物名</th>
+                            <th>建筑物地址</th>
+                            <th>入口经度</th>
+                            <th>入口纬度</th>
+                            <th>层数</th>
+                            <th>所属园区</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+
+                        <tbody th:if="${#strings.isEmpty(pageInfo.list)}">
+                            <tr>
+                                <td colspan="8" align="center">抱歉！没有查询到你要的数据</td>
+                            </tr>
+                        </tbody>
+
+
+                        <tbody th:if="${not #strings.isEmpty(pageInfo.list)}">
+                            <tr th:each="building : ${pageInfo.list}">
+                                <td>[[${building.buildingid}]]</td>
+                                <td>[[${building.buildingname}]]</td>
+                                <td>[[${building.buildinglocation}]]</td>
+                                <td>[[${building.longtitude}]]</td>
+                                <td>[[${building.latitude}]]</td>
+                                <td>[[${building.height}]]</td>
+                                <td>[[${building.regionName}]]</td>
+                                <td>
+                                    <a href="#" th:href="@{building/to/update/page.html(buildingid=${building.buildingid},regionId=${regionId},pageNum=${pageNum},keyword=${keyword})}">修改</a> |
+                                    <a href="#" th:href="@{building/delete.html(buildingid=${building.buildingid},regionId=${regionId},pageNum=${pageNum},keyword=${keyword})}" onclick="confirmDelete()">删除</a>
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                        <!--以下是显示分页导航条的代码-->
+                        <tfoot>
+                        <tr>
+                            <td colspan="8" align="center">
+                                <div id="Pagination" class="pagination"><!-- 这里显示分页 --></div>
+                            </td>
+                        </tr>
+
+                        </tfoot>
+                        <!--分页条结束-->
+
+                    </table>
+                </div><!-- table -->
+
             </div>
         </div>
     </div>
+
 </div>
+
 
 
 </body>

@@ -23,11 +23,6 @@
             //调用后面声明的函数对页码导航条进行初始化操作
             initPagination();
         });
-        function delcfm() {
-            if (!confirm("确认要删除？")) {
-                window.event.returnValue = false;
-            }
-        }
 
         //生成页码导航条的函数
         function initPagination(){
@@ -55,12 +50,24 @@
             //根据pageIndex计算pageNum
             var pageNum = pageIndex + 1;
 
+            // 每次跳转都需要将关键字带上
             var keyword = "[[${keyword}]]";
 
+            // 请求地址
             window.location.href = "region/list/page.html?pageNum="+pageNum+"&keyword="+keyword;
 
             // 由于每一个按钮都是超链接，所以在函数最后取消超连接
             return false;
+        }
+
+        //是否确认删除的提示框
+        function confirmDelete() {
+            // 显示是否删除小窗口
+            if (!confirm("确认要删除本条记录？")) {
+                // 如果取消删除,取消超链接的默认行为
+                return window.event.returnValue=false;
+            }
+
         }
     </script>
 
@@ -345,10 +352,9 @@
                     <form class="form" role="form" action="region/list/page.html" method ="post">
                         <div class="input-group">
                             <span class="input-group-addon">输入园区名称信息</span>
-                            <input type="text" class="input-sm"  name="keyword">
+                            <input type="text" class="input-sm"  name="keyword" th:value="${param.keyword}">
                             <button class="btn btn-sm btn-primary" type="submit">查询 <span class="glyphicon glyphicon-search"></span></button>
                         </div>
-
                     </form>
                 </div>
                 <div class="table-responsive container-fluid"><!-- container -->
@@ -377,7 +383,7 @@
                                 <td>[[${region.regionmap}]]</td>
                                 <td>
                                     <a href="#" th:href="@{region/to/update/page.html(regionid=${region.regionid},pageNum=${pageNum},keyword=${keyword})}">修改</a> |
-                                    <a href="/iLaN/region_delete.action?regionID=1" onclick="delcfm()">删除</a>
+                                    <a href="#" th:href="@{region/delete.html(regionid=${region.regionid},pageNum=${pageNum},keyword=${keyword})}" onclick="confirmDelete()">删除</a>
                                 </td>
                             </tr>
                         </tbody>

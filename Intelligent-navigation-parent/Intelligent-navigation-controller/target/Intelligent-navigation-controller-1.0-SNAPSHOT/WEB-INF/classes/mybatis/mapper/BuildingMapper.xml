@@ -9,6 +9,7 @@
     <result column="latitude" property="latitude" jdbcType="DOUBLE" />
     <result column="height" property="height" jdbcType="INTEGER" />
     <result column="regionID" property="regionid" jdbcType="INTEGER" />
+    <result column="t_region.regionName" property="regionName" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -71,6 +72,16 @@
   <sql id="Base_Column_List" >
     buildingID, buildingLocation, buildingName, longtitude, latitude, height, regionID
   </sql>
+  <select id="selectBuildingListByRegionIdAndKeyword" resultMap="BaseResultMap">
+    select buildingID,buildingLocation,buildingName,longtitude,latitude,height,t_building.regionID,t_region.regionName
+    from t_building left join t_region
+    on t_building.regionID = t_region.regionID
+    where t_building.buildingName like concat("%", #{keyword}, "%")
+    <if test="regionId != null and regionId != 0">
+      and t_building.regionID = #{regionId}
+    </if>
+    order by buildingID
+  </select>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="edu.hust.top.bean.BuildingExample" >
     select
     <if test="distinct" >

@@ -5,12 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <base th:href="@{/}">
-    <title>修改园区</title>
+    <title>添加建筑物</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/fileinput.min.css" rel="stylesheet">
+    <link href="css/bootstrap-select.min.css" rel="stylesheet">
     <link href="css/menu.css" rel="stylesheet">
     <script src="js/jquery-2.1.1.min.js "></script>
     <script src="js/bootstrap.min.js "></script>
+    <script src="js/bootstrap-select.min.js "></script>
     <script src="js/fileinput.min.js "></script>
     <script src="js/zh.js "></script>
     <script>
@@ -19,53 +21,6 @@
                 /*切换折叠指示图标*/
                 $(this).find("span").toggleClass("glyphicon-chevron-down");
                 $(this).find("span").toggleClass("glyphicon-chevron-up");
-            });
-
-            $("[name=regionMap]").fileinput({
-                showUpload: false,
-                dropZoneEnabled: false,
-                maxFileCount: 1,
-                mainClass: "input-group-sm",
-                language: 'zh', //设置语言
-                uploadUrl: "", //上传的地址
-                allowedFileExtensions: ['svg','js'],//接收的文件后缀
-            });
-
-            // 在文件上传框的值改变事件响应函数中上传图片
-            $("[name=regionMap]").change(function(event){
-                var file = event.target.files[0];
-                var url = window.url || window.webkitURL;
-                var path = url.createObjectURL(file);// blob:http://localhost:8080/09571393-dcd8-4863-a0be-4660e2ac21e1
-                // 将上传的文件封装到FormData对象中
-                var formData = new FormData();
-                formData.append("regionMap", file);
-                // 发送Ajax请求上传文件
-                $.ajax({
-                    "url":"[[@{/region/file/upload.json}]]",
-                    "type":"post",
-                    "data":formData,
-                    "contentType":false,
-                    "processData":false,
-                    "dataType":"json",
-                    "success":function(response){
-                        var result = response.result;
-                        if(result == "SUCCESS") {
-
-                            var regionmap = response.data;
-
-                            $("<input type='hidden' name='regionmap' value="+regionmap+">").insertBefore($("#confirmBtn"));
-
-                            alert("上传成功！");
-                        }
-                        if(result == "FAILED") {
-                            alert(response.message);
-                        }
-                    },
-                    "error":function(response){
-                        alert(response.status + " " + response.statusText);
-                    }
-                });
-
             });
         });
 
@@ -84,6 +39,7 @@
 <body>
 <div class="container-fluid ">
     <div class="container-fluid">
+
 
         <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
             <div class="container-fluid">
@@ -344,32 +300,50 @@
                 </div>
             </div>
 
-
             <div class="col-md-10">
                 <div class="container">
 
                     <div class="container">
-                        <form class="form" action = "region/update.html" th:action="@{region/update.html(pageNum=${pageNum},keyword=${keyword})}" method ="post">
-                            <h3>修改园区</h3>
-                            <p style="color: red" th:text="${message}"></p>
-                            <input type="hidden" name="regionid" th:value="${region.regionid}">
+                        <form class="form" action = "building/add.html" method ="post">
+                            <h3>添加建筑物</h3>
+                            <p style="color: red" th:text="${session.message}"></p>
                             <div class="input-group">
-                                <span class="input-group-addon">园区名</span>
-                                <input type="text" class="form-control" name="regionname" th:value="${region.regionname}">
+                                <span class="input-group-addon">所属园区</span>
+                                <select name ="regionid" class="selectpicker form-control" show-menu-arrow data-live-search="true">
+                                    <option value="0">请选择所属园区</option>
+
+                                    <option value="1" th:each="region : ${session.regionList}" th:value="${region.regionid}">[[${region.regionname}]]</option>
+
+                                </select>
                             </div>
                             <br>
                             <div class="input-group">
-                                <span class="input-group-addon">园区地址</span>
-                                <input type="text" class="form-control" name="regionlocation" th:value="${region.regionlocation}">
+                                <span class="input-group-addon">建筑物名称</span>
+                                <input type="text" class="form-control" name="buildingname">
                             </div>
                             <br>
                             <div class="input-group">
-                                <span class="input-group-addon">上传地图文件</span>
-                                <input name="regionMap" type="file">
+                                <span class="input-group-addon">建筑物地址</span>
+                                <input type="text" class="form-control" name="buildinglocation">
+                            </div>
+                            <br>
+                            <div class="input-group">
+                                <span class="input-group-addon">入口经度</span>
+                                <input type="text" class="form-control" name="longtitude">
+                            </div>
+                            <br>
+                            <div class="input-group">
+                                <span class="input-group-addon">入口纬度</span>
+                                <input type="text" class="form-control" name="latitude">
+                            </div>
+                            <br>
+                            <div class="input-group">
+                                <span class="input-group-addon">层数</span>
+                                <input type="text" class="form-control" name="height">
                             </div>
                             <br>
 
-                            <button id="confirmBtn" class="btn btn-sm btn-primary" type="submit">确认修改</button><strong></strong>
+                            <button class="btn btn-sm btn-primary" type="submit">保存</button><strong></strong>
                         </form>
                     </div>
                 </div>
@@ -377,7 +351,6 @@
         </div>
     </div>
 </div>
-
 
 </body>
 </html>

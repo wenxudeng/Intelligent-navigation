@@ -72,8 +72,7 @@
     select regionID, regionName, regionLocation, regionMap
     from t_region
     where regionName like concat("%", #{keyword}, "%")
-    or regionLocation like concat("%", #{keyword}, "%")
-    or regionMap like concat("%", #{keyword}, "%")
+    order by regionID
   </select>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="edu.hust.top.bean.RegionExample" >
     select
