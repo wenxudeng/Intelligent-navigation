@@ -2,11 +2,13 @@ package edu.hust.top.controller;
 
 import edu.hust.top.bean.Manager;
 import edu.hust.top.service.ManagerService;
+import edu.hust.top.util.ResultEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 
@@ -28,8 +30,9 @@ public class ManagerController {
      * @param session
      * @return
      */
-    @RequestMapping("/manager/do/login.html")
-    public String managerDoLogin(Manager manager, HttpSession session){
+    @ResponseBody
+    @RequestMapping("/manager/do/login.json")
+    public ResultEntity<String> managerDoLogin(Manager manager, HttpSession session){
 
         try {
             // 调用service层登录方法
@@ -41,16 +44,13 @@ public class ManagerController {
             // 没有抛出异常说明管理员信息有效，将管理员姓名存入session域中
             session.setAttribute("manager", manager);
 
-            // 实现页面的跳转
-            return "redirect:/manager/to/main/page.html";
+            // 成功返回且不带数据
+            return ResultEntity.successWithoutData();
         } catch (Exception e) {
             e.printStackTrace();
 
-            // 将登录失败信息返回页面
-            session.setAttribute("message", e.getMessage());
-
-            // 如果登录中出现异常，重定向到起始页面
-            return "redirect:/index.html";
+            // 如果登录中出现异常，携带异常信息返回
+            return ResultEntity.failed(e.getMessage());
         }
     }
 
@@ -86,15 +86,19 @@ public class ManagerController {
                                         ModelMap modelMap){
 
         try {
+            // 调用service层的changeManagerPassword方法
             managerService.changeManagerPassword(namagerid, oldPwd, newPwd, newPwd2);
 
+            // 如果未出现异常表示修改成功，重定向到首页重新登录
             return "redirect:/manager/do/logout.html";
 
         } catch (Exception e) {
             e.printStackTrace();
 
+            // 如果出现异常，将异常信息放入request域中返回
             modelMap.addAttribute("message", e.getMessage());
 
+            // 转发到当前页面回显错误信息
             return "manager-change-password";
         }
     }

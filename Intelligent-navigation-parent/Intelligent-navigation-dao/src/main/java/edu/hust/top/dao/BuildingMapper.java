@@ -27,4 +27,6 @@ public interface BuildingMapper {
     int updateByPrimaryKeySelective(Building record);
 
     int updateByPrimaryKey(Building record);
+
+    List<Building> selectBuildingListByRegionIdAndKeyword(@Param("regionId") Integer regionId, @Param("keyword") String keyword);
 }

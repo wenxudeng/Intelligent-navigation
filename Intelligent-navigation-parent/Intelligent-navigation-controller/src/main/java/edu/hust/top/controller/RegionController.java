@@ -2,6 +2,7 @@ package edu.hust.top.controller;
 
 import com.github.pagehelper.PageInfo;
 import edu.hust.top.bean.Region;
+import edu.hust.top.exception.RegionException;
 import edu.hust.top.service.RegionService;
 import edu.hust.top.util.ResultEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,15 +91,20 @@ public class RegionController {
             regionService.addRegion(region);
 
             // 数据存入成功时，重定向到主页面
-            return "redirect:/manager/to/main/page.html";
+            return "redirect:/region/list/page.html";
 
         } catch (Exception e) {
 
             e.printStackTrace();
 
-            // 将异常信息放入request域中，回显到页面
-            modelMap.addAttribute("message", "保存失败！");
-
+            // 如果当前异常为自定义异常
+            if(e instanceof RegionException){
+                // 将异常信息放入request域中，回显到页面
+                modelMap.addAttribute("message", e.getMessage());
+            }else {
+                // 将异常信息放入request域中，回显到页面
+                modelMap.addAttribute("message", "园区名不允许重复");
+            }
             // 转发到页面
             return "region-add";
         }
@@ -115,7 +121,7 @@ public class RegionController {
     @RequestMapping("/region/list/page.html")
     public String listRegion(@RequestParam(value = "keyword", defaultValue = "")String keyword,
                              @RequestParam(value = "pageNum", defaultValue = "1")Integer pageNum,
-                             @RequestParam(value = "pageSize", defaultValue = "10")Integer pageSize,
+                             @RequestParam(value = "pageSize", defaultValue = "20")Integer pageSize,
                              ModelMap map){
 
         // 调用service层的getRegionList方法查询和分页
@@ -130,6 +136,14 @@ public class RegionController {
         return "region-list";
     }
 
+    /**
+     * 该方法用于去往修改region页面回显信息
+     * @param regionid
+     * @param pageNum
+     * @param keyword
+     * @param map
+     * @return
+     */
     @RequestMapping("/region/to/update/page.html")
     public String regionToUpdatePage(@RequestParam("regionid")Integer regionid,
                                      @RequestParam(value = "pageNum", defaultValue = "1")Integer pageNum,
@@ -142,6 +156,8 @@ public class RegionController {
 
             // 将查询到的region对象放在域中，便于后续页面回显
             map.addAttribute("region", region);
+            map.addAttribute("keyword", keyword);
+            map.addAttribute("pageNum", pageNum);
 
             // 实现页面跳转
             return "region-update";
@@ -152,6 +168,65 @@ public class RegionController {
             // 如果出现异常，重定向到列表页面
             return "redirect:/region/list/page.html?pageNum="+pageNum+"&keyword="+keyword;
         }
+    }
+
+    /**
+     * 该方法用于修改region信息
+     * @param region
+     * @param pageNum
+     * @param keyword
+     * @param map
+     * @return
+     */
+    @RequestMapping("/region/update.html")
+    public String updateRegion(Region region,
+                               @RequestParam(value = "pageNum", defaultValue = "1")Integer pageNum,
+                               @RequestParam(value = "keyword", defaultValue = "")String keyword,
+                               ModelMap map){
+        try {
+            // 调用service层的更新方法
+            regionService.updateRegion(region);
+
+            // 如果未出现异常，重定向到显示列表页面
+            return "redirect:/region/list/page.html?pageNum="+pageNum+"&keyword="+keyword;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            // 将异常信息放入模型，回显到页面
+            map.addAttribute("message", e.getMessage());
+
+            // 返回当前页面
+            return "region-update";
+        }
+    }
+
+    /**
+     * 该方法用于从数据库中删除一个region对象
+     * @param regionid
+     * @param pageNum
+     * @param keyword
+     * @param map
+     * @return
+     */
+    @RequestMapping("/region/delete.html")
+    public String deleteRegion(@RequestParam("regionid")Integer regionid,
+                               @RequestParam(value = "pageNum", defaultValue = "1")Integer pageNum,
+                               @RequestParam(value = "keyword", defaultValue = "")String keyword,
+                               ModelMap map){
+        try {
+            // 调用service层的删除方法
+            regionService.deleteRegion(regionid);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            // 将异常信息放入模型，回显到页面
+            map.addAttribute("message", e.getMessage());
+        }
+
+        // 无论是否删除成功，重定向到显示列表页面
+        return "redirect:/region/list/page.html?pageNum="+pageNum+"&keyword="+keyword;
     }
 
 }

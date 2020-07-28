@@ -53,7 +53,7 @@
 
                             var regionmap = response.data;
 
-                            $("<input type='hidden' name='regionmap' value="+regionmap+">").insertBefore($("#saveBtn"));
+                            $("<input type='hidden' name='regionmap' value="+regionmap+">").insertBefore($("#confirmBtn"));
 
                             alert("上传成功！");
                         }
@@ -349,7 +349,7 @@
                 <div class="container">
 
                     <div class="container">
-                        <form class="form" action = "region/update.html" method ="post">
+                        <form class="form" action = "region/update.html" th:action="@{region/update.html(pageNum=${pageNum},keyword=${keyword})}" method ="post">
                             <h3>修改园区</h3>
                             <p style="color: red" th:text="${message}"></p>
                             <input type="hidden" name="regionid" th:value="${region.regionid}">
@@ -369,7 +369,7 @@
                             </div>
                             <br>
 
-                            <button class="btn btn-sm btn-primary" type="submit">确认修改</button><strong></strong>
+                            <button id="confirmBtn" class="btn btn-sm btn-primary" type="submit">确认修改</button><strong></strong>
                         </form>
                     </div>
                 </div>

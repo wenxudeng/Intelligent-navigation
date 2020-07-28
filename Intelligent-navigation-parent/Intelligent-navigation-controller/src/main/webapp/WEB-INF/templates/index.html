@@ -58,6 +58,44 @@
         });
     </script>
     <!--//pop-up-box -->
+    <script>
+        $(function () {
+            // 点击登录按钮单击响应函数
+            $("#loginBtn").click(function(){
+                // 取出管理员姓名文本框的值
+                var managername = $.trim($("#managerName").val());
+                // 取出管理员密码的值
+                var managerpwd = $.trim($("#managerPwd").val());
+                // 发送ajax请求去往后台验证登录
+                $.ajax({
+                    "url":"manager/do/login.json",
+                    "type":"post",
+                    "data":{
+                        "managername":managername,
+                        "managerpwd":managerpwd
+                    },
+                    "dataType":"json",
+                    "success":function(response){
+                        var result = response.result;
+                        if(result == "SUCCESS"){
+                            // 如果验证成功，发出去往主页面的请求
+                            window.location.href="manager/to/main/page.html";
+                        }
+                        // 如果验证失败，将错误信息回显到当前页面上
+                        if(result == "FAILED") {
+                            // 从返回结果中取出错误信息
+                            var message = response.message;
+                            // 将错误信息显示到页面
+                            $("#message").text(message);
+                        }
+                    },
+                    "error":function(response){
+                        alert(response.status + " " + response.statusText);
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 <body>
 <div class="body-back">
@@ -95,8 +133,8 @@
                                 <h3>管理员登录</h3>
                             </div>
                             <div class="login-form">
-                                <p style="color: red" th:text="${session.message}"></p>
-                                <form  id="loginForm" action="manager/do/login.html" method="post">
+                                <form id="loginForm">
+                                    <p id="message" style="color: red"></p>
                                     <p>管理员姓名 </p>
                                     <input id = "managerName" type="text" name="managername" required="true"/>
                                     <p>登录密码</p>
@@ -104,7 +142,7 @@
                                     <div class="wthree-text">
                                         <div class="clear"> </div>
                                     </div>
-                                    <button class="btn btn-success" type="submit">登录</button>
+                                    <button id="loginBtn" class="btn btn-success" type="button">登录</button>
                                 </form>
                             </div>
                         </div>

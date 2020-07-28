@@ -1,7 +1,9 @@
 package edu.hust.top.test;
 
 import edu.hust.top.bean.Beacon;
+import edu.hust.top.bean.Region;
 import edu.hust.top.dao.BeaconMapper;
+import edu.hust.top.dao.RegionMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -24,6 +26,9 @@ public class MybatisTest {
     private BeaconMapper beaconMapper;
 
     @Autowired
+    private RegionMapper regionMapper;
+
+    @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
     private Logger logger = LoggerFactory.getLogger(MybatisTest.class);
@@ -41,5 +46,13 @@ public class MybatisTest {
         String encode = passwordEncoder.encode("123456");
 
         logger.info(encode);
+    }
+
+    @Test
+    public void testBatchInsertRegion(){
+
+        for (int i = 4; i < 1000; i++) {
+            regionMapper.insertSelective(new Region(null, "region"+i, "region"+i, null));
+        }
     }
 }
